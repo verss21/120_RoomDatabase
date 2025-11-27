@@ -9,6 +9,19 @@ import androidx.room.RoomDatabase
 abstract class DatabaseSiswa : RoomDatabase(){
     abstract fun siswaDao() : SiswaDAO
 
+    companion object {
+        @Volatile
+        private var instance: DatabaseSiswa? = null
 
+        fun getDatabase(context : Context): DatabaseSiswa{
+            return (instance?: synchronized(this){
+                Room.databaseBuilder(
+                    context, DatabaseSiswa::class.java,
+                    "siswa_database")
+                    .build().also {instance=it }
+            })
+        }
+    }
+}
 
 
